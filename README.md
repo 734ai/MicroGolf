@@ -489,8 +489,8 @@ This project is licensed under **Apache License 2.0**.
 ## Contact Information
 
 **Author**: Muzan Sano  
-**Institution**: Research Unit 734  
-**Email**: research@734ai.org  
+**Institution**: NorthernTribe Research
+**Email**: research.unit734@proton.me 
 **Repository**: https://github.com/734ai/MicroGolf  
 **Competition**: NeurIPS 2025 ARC-Golf Challenge  
 
