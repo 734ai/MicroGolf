@@ -2,6 +2,11 @@
 Neural Cellular Automata (NCA) for MicroGolf
 Ultra-compact iterative local transformation engine
 """
+"""
+Author: Muzan Sano
+NeurIPS 2025 ARC-Golf Challenge
+License: Apache 2.0
+"""
 
 import numpy as np
 from typing import List, Tuple, Dict, Any, Callable

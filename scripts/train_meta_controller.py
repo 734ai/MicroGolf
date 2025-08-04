@@ -3,6 +3,11 @@
 Advanced Meta-Controller Training Script for MicroGolf
 Trains the lightweight transformer model on ARC tasks with primitive sequences
 """
+"""
+Author: Muzan Sano
+NeurIPS 2025 ARC-Golf Challenge
+License: Apache 2.0
+"""
 
 import argparse
 import json

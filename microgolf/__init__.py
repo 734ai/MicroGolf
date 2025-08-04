@@ -5,6 +5,11 @@ NeurIPS 2025 Google Code Golf Championship
 A state-of-the-art framework for generating ultra-compact (<2500 bytes)
 Python solutions using modular primitives, DSL, and meta-learning.
 """
+"""
+Author: Muzan Sano
+NeurIPS 2025 ARC-Golf Challenge
+License: Apache 2.0
+"""
 
 __version__ = "1.0.0"
 __author__ = "MicroGolf Team"

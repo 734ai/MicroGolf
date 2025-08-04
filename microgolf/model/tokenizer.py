@@ -2,6 +2,11 @@
 Advanced Tokenizer for ARC-AGI Tasks
 Converts grid examples into compact token sequences for meta-learning
 """
+"""
+Author: Muzan Sano
+NeurIPS 2025 ARC-Golf Challenge
+License: Apache 2.0
+"""
 
 import numpy as np
 from typing import List, Dict, Tuple, Any, Optional

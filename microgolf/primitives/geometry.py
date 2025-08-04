@@ -1,4 +1,9 @@
 # bytes: 19
+"""
+Author: Muzan Sano
+NeurIPS 2025 ARC-Golf Challenge
+License: Apache 2.0
+"""
 def r90(g):return[list(r)for r in zip(*g[::-1])]
 # bytes: 18  
 def fh(g):return g[::-1]

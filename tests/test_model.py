@@ -2,6 +2,11 @@
 Test suite for MicroGolf model components
 Tests tokenizer, meta-composer, and training pipeline
 """
+"""
+Author: Muzan Sano
+NeurIPS 2025 ARC-Golf Challenge
+License: Apache 2.0
+"""
 
 import pytest
 import sys

@@ -1,4 +1,9 @@
 # bytes: 20
+"""
+Author: Muzan Sano
+NeurIPS 2025 ARC-Golf Challenge
+License: Apache 2.0
+"""
 def mc(g,m):return[[m.get(c,c)for c in r]for r in g]
 # bytes: 18
 def tm(g,t):return[[1 if c>t else 0 for c in r]for r in g]

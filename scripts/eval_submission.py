@@ -3,6 +3,11 @@
 Comprehensive Evaluation Script for MicroGolf
 Evaluates generated solutions on ARC tasks and produces detailed metrics
 """
+"""
+Author: Muzan Sano
+NeurIPS 2025 ARC-Golf Challenge
+License: Apache 2.0
+"""
 
 import argparse
 import json

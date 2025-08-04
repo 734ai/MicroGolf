@@ -10,6 +10,7 @@ model/checkpoints/
 data/arc/
 *.zip
 *.log
+kaggle.json
 
 # Python artifacts
 __pycache__/
