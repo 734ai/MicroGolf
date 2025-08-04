@@ -17,9 +17,11 @@ import traceback
 # Add project root to path
 sys.path.append(str(Path(__file__).parent.parent))
 
-from microgolf.model import MetaComposer, create_primitive_vocab
-from microgolf.engine import PrimitiveController, AbstractPlan, OptimizedExecutor
-from microgolf.primitives import PRIMITIVES
+from microgolf.model.tokenizer import ARCTokenizer
+from microgolf.model.meta_composer import MicroTransformer
+from microgolf.engine.controller import PrimitiveController
+from microgolf.engine.executor import OptimizedExecutor
+from microgolf.data_loader import ARCDataLoader
 
 
 class TaskEvaluator:
@@ -141,21 +143,31 @@ class SolutionGenerator:
     """Generates solutions using MicroGolf framework"""
     
     def __init__(self, model_path: Optional[str] = None):
-        self.primitive_vocab = create_primitive_vocab()
+        self.tokenizer = ARCTokenizer()
         
         # Initialize components
         self.controller = PrimitiveController()
         self.executor = OptimizedExecutor()
         
-        # Load meta-composer if available
-        self.meta_composer = None
+        # Initialize model
+        self.model = MicroTransformer(
+            vocab_size=100,
+            d_model=128,
+            nhead=8,
+            num_layers=4,
+            dim_feedforward=512,
+            max_seq_length=64
+        )
+        
+        # Load model if available
         if model_path and Path(model_path).exists():
             try:
-                self.meta_composer = MetaComposer(self.primitive_vocab)
-                self.meta_composer.load_model(model_path)
-                print(f"Loaded meta-composer from {model_path}")
+                import torch
+                checkpoint = torch.load(model_path, map_location='cpu')
+                self.model.load_state_dict(checkpoint['model_state_dict'])
+                print(f"Loaded model from {model_path}")
             except Exception as e:
-                print(f"Failed to load meta-composer: {e}")
+                print(f"Failed to load model: {e}")
     
     def generate_solution(self, task_data: Dict) -> Tuple[str, Dict[str, Any]]:
         """Generate solution code for a task"""
@@ -174,48 +186,56 @@ class SolutionGenerator:
         start_time = time.time()
         
         try:
-            # Method 1: Try meta-composer if available
-            if self.meta_composer:
-                try:
-                    primitive_sequence = self.meta_composer.predict_sequence(examples)
+            # Method 1: Try model-based generation
+            try:
+                # Convert examples to (input, output) pairs
+                example_pairs = []
+                for ex in examples[:3]:  # Use first 3 examples
+                    if 'input' in ex and 'output' in ex:
+                        example_pairs.append((ex['input'], ex['output']))
+                
+                if example_pairs:
+                    # Generate features using tokenizer
+                    features = self.tokenizer.tokenize_examples(example_pairs)
+                    
+                    # Generate primitive sequence using model
+                    import torch
+                    with torch.no_grad():
+                        input_tensor = torch.tensor(features, dtype=torch.float32).unsqueeze(0)
+                        output = self.model(input_tensor)
+                        primitive_sequence = self.model.decode_sequence(output[0])
+                    
                     if primitive_sequence:
-                        plan = AbstractPlan()
-                        for prim in primitive_sequence:
-                            plan.add_step(prim)
-                        
-                        optimized_plan = plan.optimize()
-                        code = self.executor.execute_plan_optimized(optimized_plan)
+                        # Generate code using executor
+                        code = self.executor.generate_code(primitive_sequence)
+                        optimized_code = self.executor.optimize_code(code)
                         
                         metadata.update({
-                            'method': 'meta_composer',
+                            'method': 'model_based',
                             'primitives': primitive_sequence,
-                            'estimated_bytes': len(code.encode('utf-8'))
+                            'estimated_bytes': len(optimized_code.encode('utf-8'))
                         })
                         
                         metadata['generation_time'] = time.time() - start_time
-                        return code, metadata
-                except Exception as e:
-                    print(f"Meta-composer failed: {e}")
+                        return optimized_code, metadata
+            except Exception as e:
+                print(f"Model-based generation failed: {e}")
             
             # Method 2: Heuristic controller
             try:
                 primitive_sequence = self.controller.predict_sequence(examples)
                 if primitive_sequence:
-                    plan = AbstractPlan()
-                    for prim in primitive_sequence:
-                        plan.add_step(prim)
-                    
-                    optimized_plan = plan.optimize()
-                    code = self.executor.execute_plan_optimized(optimized_plan)
+                    code = self.executor.generate_code(primitive_sequence)
+                    optimized_code = self.executor.optimize_code(code)
                     
                     metadata.update({
                         'method': 'heuristic_controller',
                         'primitives': primitive_sequence,
-                        'estimated_bytes': len(code.encode('utf-8'))
+                        'estimated_bytes': len(optimized_code.encode('utf-8'))
                     })
                     
                     metadata['generation_time'] = time.time() - start_time
-                    return code, metadata
+                    return optimized_code, metadata
             except Exception as e:
                 print(f"Heuristic controller failed: {e}")
             
@@ -393,26 +413,48 @@ def load_arc_tasks(data_dir: Path) -> List[Dict]:
     
     tasks = []
     
-    # For demo, create synthetic tasks
-    for i in range(10):
-        task = {
-            'id': f'eval_{i:03d}',
-            'train': [
-                {
-                    'input': np.random.randint(0, 5, (3, 3)).tolist(),
-                    'output': np.random.randint(0, 5, (3, 3)).tolist()
-                }
-            ],
-            'test': [
-                {
-                    'input': np.random.randint(0, 5, (3, 3)).tolist(),
-                    'output': np.random.randint(0, 5, (3, 3)).tolist()
-                }
-            ]
-        }
-        tasks.append(task)
+    try:
+        # Try to load real ARC data
+        data_loader = ARCDataLoader(str(data_dir))
+        training_tasks = data_loader.load_training_tasks()
+        evaluation_tasks = data_loader.load_evaluation_tasks()
+        
+        # Convert to list format
+        for task_id, task_data in training_tasks.items():
+            task_data['id'] = task_id
+            tasks.append(task_data)
+        
+        for task_id, task_data in evaluation_tasks.items():
+            task_data['id'] = task_id
+            tasks.append(task_data)
+        
+        print(f"Loaded {len(tasks)} real ARC tasks")
+        return tasks
     
-    return tasks
+    except Exception as e:
+        print(f"Failed to load real ARC data: {e}")
+        print("Using synthetic tasks for demo...")
+        
+        # Fallback to synthetic tasks for demo
+        for i in range(10):
+            task = {
+                'id': f'demo_{i:03d}',
+                'train': [
+                    {
+                        'input': [[1, 2], [2, 1]],
+                        'output': [[2, 1], [1, 2]]
+                    }
+                ],
+                'test': [
+                    {
+                        'input': [[1, 2], [2, 1]],
+                        'output': [[2, 1], [1, 2]]
+                    }
+                ]
+            }
+            tasks.append(task)
+        
+        return tasks
 
 
 def main():
