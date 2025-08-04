@@ -1,4 +1,9 @@
 # bytes: 15
+"""
+Author: Muzan Sano
+NeurIPS 2025 ARC-Golf Challenge
+License: Apache 2.0
+"""
 def inc(g):return[[c+1 for c in r]for r in g]
 # bytes: 18
 def cl(g,mi,ma):return[[max(mi,min(ma,c))for c in r]for r in g]

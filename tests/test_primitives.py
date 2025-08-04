@@ -2,6 +2,11 @@
 Comprehensive test suite for MicroGolf primitives
 Tests all ultra-compact functions for correctness and byte compliance
 """
+"""
+Author: Muzan Sano
+NeurIPS 2025 ARC-Golf Challenge
+License: Apache 2.0
+"""
 
 import pytest
 import sys

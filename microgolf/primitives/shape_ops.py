@@ -1,4 +1,9 @@
 # bytes: 20
+"""
+Author: Muzan Sano
+NeurIPS 2025 ARC-Golf Challenge
+License: Apache 2.0
+"""
 def ff(g,x,y,c):
  def f(i,j):
   if 0<=i<len(g)and 0<=j<len(g[0])and g[i][j]==g[x][y]:g[i][j]=c;[f(i+di,j+dj)for di,dj in[(0,1),(1,0),(0,-1),(-1,0)]]

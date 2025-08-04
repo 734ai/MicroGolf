@@ -3,6 +3,11 @@
 Advanced Code Golf Pruning Script for MicroGolf
 Applies aggressive AST-based and regex optimizations to minimize byte count
 """
+"""
+Author: Muzan Sano
+NeurIPS 2025 ARC-Golf Challenge
+License: Apache 2.0
+"""
 
 import argparse
 import ast

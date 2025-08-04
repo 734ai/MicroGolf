@@ -2,6 +2,11 @@
 Heuristic Controller for MicroGolf
 Maps task fingerprints to optimal primitive sequences using pattern recognition
 """
+"""
+Author: Muzan Sano
+NeurIPS 2025 ARC-Golf Challenge
+License: Apache 2.0
+"""
 
 import numpy as np
 from typing import List, Tuple, Dict, Any

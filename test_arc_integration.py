@@ -3,6 +3,11 @@
 End-to-End Integration Test for MicroGolf with Real ARC Data
 Tests the complete pipeline without requiring PyTorch
 """
+"""
+Author: Muzan Sano
+NeurIPS 2025 ARC-Golf Challenge
+License: Apache 2.0
+"""
 
 import sys
 from pathlib import Path

@@ -2,6 +2,11 @@
 ARC Dataset Loader for MicroGolf
 Loads and processes the Abstraction and Reasoning Corpus dataset
 """
+"""
+Author: Muzan Sano
+NeurIPS 2025 ARC-Golf Challenge
+License: Apache 2.0
+"""
 
 import json
 import os

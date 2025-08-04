@@ -2,6 +2,11 @@
 MicroGolf Package Setup
 Ultra-compact ARC-AGI solution framework for NeurIPS 2025 Google Code Golf Championship
 """
+"""
+Author: Muzan Sano
+NeurIPS 2025 ARC-Golf Challenge
+License: Apache 2.0
+"""
 
 from setuptools import setup, find_packages
 from pathlib import Path

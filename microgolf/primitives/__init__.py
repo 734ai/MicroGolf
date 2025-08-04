@@ -1,4 +1,9 @@
 """Ultra-compact primitives for ARC-AGI tasks (<= 20 bytes each)"""
+"""
+Author: Muzan Sano
+NeurIPS 2025 ARC-Golf Challenge
+License: Apache 2.0
+"""
 
 from .geometry import r90, fh, fv, tr, sh
 from .color_ops import mc, tm, rc, bc, md  

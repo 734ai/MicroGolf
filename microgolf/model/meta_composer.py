@@ -1,6 +1,11 @@
 """
 Stub Meta-Composer module when PyTorch is not available
 """
+"""
+Author: Muzan Sano
+NeurIPS 2025 ARC-Golf Challenge
+License: Apache 2.0
+"""
 
 import numpy as np
 from typing import List, Dict, Any

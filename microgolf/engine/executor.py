@@ -2,6 +2,11 @@
 Code Executor for MicroGolf
 Converts Abstract Plans into ultra-compact executable Python code
 """
+"""
+Author: Muzan Sano
+NeurIPS 2025 ARC-Golf Challenge
+License: Apache 2.0
+"""
 
 import ast
 import re
